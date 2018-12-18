@@ -20,6 +20,9 @@
 				</view>
 			</view>
 		</view>
+		
+		<input style="" @focus="focus" placeholder="请输入内容"/>
+		
 	</view>
 </template>
 
@@ -80,7 +83,7 @@
 						lastTime:'下午 15：32',
 						messageCount:20,
 						lastMessage:'兄弟们好',
-					},
+					}
 					]
 				}
 			};
@@ -88,9 +91,12 @@
 		methods: {
 			goToChat(item){
 				uni.navigateTo({
-					url: './chat?from='+JSON.stringify(item),
+					url: '../chat/chat?from='+JSON.stringify(item),
 				});
-			}
+			},
+			focus(e){
+				console.log("e:"+JSON.stringify(e.detail))
+			},
 		},
 		components:{
 			uniBadge,
