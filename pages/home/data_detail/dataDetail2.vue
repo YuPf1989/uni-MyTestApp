@@ -28,6 +28,8 @@
 				{{item}}
 			</view>
 		</view>
+		
+		
 	</view>
 </template>
 
@@ -111,6 +113,9 @@
 		onLoad(e) {
 			console.log("data_type:" + e.data_type);
 			this.data_type = JSON.parse(e.data_type);
+			uni.setNavigationBarTitle({
+				title:this.data_type.monitorName,
+			})
 			// todo需要详细考虑
 			const param = {
 				monitorType: "szy",

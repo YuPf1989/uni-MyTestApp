@@ -27,8 +27,27 @@ const setUserInfo = function (info) {
 		"msg": info.msg,
 		"address_detail": info.address_detail,
 	};
+	setUserId(info.user_id);
+	setIsLogin(true);
     uni.setStorageSync(USERS_INFO, JSON.stringify(userInfo));
+}
+
+// 更新用户部分信息，注意要要与原先的键保持一致
+function updateUserInfo(partUserInfo){
+	console.log(JSON.stringify(partUserInfo))
+	let defaultUserInfo = getUserInfo();
 	
+	for(let x in partUserInfo){
+		if(partUserInfo[x]){
+			if(defaultUserInfo[x]){
+				defaultUserInfo[x] = partUserInfo[x];
+			}else{
+				console.log("userInfo不存在属性："+x)
+			}
+		}
+	}
+	
+	uni.setStorageSync(USERS_INFO, JSON.stringify(defaultUserInfo));
 }
 
 const clearUserInfo = function(){
@@ -56,14 +75,21 @@ function isLogin(){
 	return isLogin;
 }
 
+function add(a){
+	console.log(JSON.stringify(a))
+}
+
 export default {
     getUserInfo,
     setUserInfo,
+	updateUserInfo,
 	clearUserInfo,
 	setIsLogin,
 	isLogin,
 	setUserId,
 	getUserId,
+	
+	add,
 }
 
 

@@ -1,23 +1,21 @@
 <template>
 	<view class="container">
 		<!-- 用户基本信息 -->
-		<view class="head">
-			<image :src="userImgUrl" class="userImage"></image>
-			<text class="userText" @tap="login">{{userName}}</text>
+		<view class="head" :hover-class="isLogin? 'item-hover':''" @tap="isLogin? goToUserInfo(userInfo):''">
+			<image :src="isLogin? avatarUrl:'../../static/userImg.png'" class="userImage"></image>
+			<text class="userText" @tap="login">{{isLogin? userName:'登录'}}</text>
 		</view>
-		
+
 		<view style="height: 36upx;"></view>
-		
-		<view  v-for="(item,index) in itemList" :key = "index" >
+
+		<view v-for="(item,index) in itemList" :key="index">
 			<view class="item" hover-class="item-hover">
-				<image class="item-img" :src="item.imgUrl" ></image>
-				<view class="item-right">
-					<text class="item-text">{{item.text}}</text>
-					<image class="item-img2" src="../../static/arrow-right.png"></image>
-				</view>
+				<image class="item-img" :src="item.imgUrl"></image>
+				<text class="item-text">{{item.text}}</text>
+				<image class="item-img2" src="../../static/arrow-right.png"></image>
 			</view>
 		</view>
-		<view class="logout" @tap="logout">退出登录</view>
+		<view class="logout" @tap="logout" hover-class="item-hover-light">退出登录</view>
 	</view>
 </template>
 
@@ -31,8 +29,8 @@
 		data() {
 			console.log("data");
 			return {
-				userImgUrl: "../../static/logo.png",
-				userName: "登录",
+				userInfo:{},
+				isLogin: false,
 				itemList: [{
 						imgUrl: "../../static/account.png",
 						text: "消息",
@@ -50,33 +48,41 @@
 				],
 			};
 		},
-		// 这个暂时未使用
 		computed: mapState(['userName', 'avatarUrl']),
 		methods: {
 			logout() {
-				if(!helper.isLogin()){
+				if (!this.isLogin) {
 					return
 				}
-				helper.setIsLogin(false);
+				this.isLogin = false;
+				service.setIsLogin(false);
 				service.clearUserInfo();
 				helper.showToast("您已退出登录！");
-				this.userImgUrl="../../static/logo.png";
-				this.userName="登录";
 			},
-			login(){
-				if(helper.isLogin()){
+			login() {
+				if (this.isLogin) {
 					return
 				}
 				uni.navigateTo({
 					url: '../login/login',
 				});
 			},
+			goToUserInfo(userInfo){
+				uni.navigateTo({
+					url: `./userInfo?userInfo=${JSON.stringify(this.userInfo)}`,
+				});
+			}
 		},
 		onLoad() {
-			let userInfo = service.getUserInfo();
-			console.log("userInfo:" + JSON.stringify(userInfo));
-			this.userImgUrl = userInfo.img_url;
-			this.userName = userInfo.zsxm;
+			this.isLogin = service.isLogin();
+			console.log("isLogin:"+this.isLogin)
+			
+			if (this.isLogin) {
+				this.userInfo = service.getUserInfo();
+				this.avatarUrl = this.userInfo.img_url;
+				this.userName = this.userInfo.zsxm;
+				// console.log("userInfo:" + JSON.stringify(this.userInfo));
+			}
 		},
 	}
 </script>
@@ -126,13 +132,13 @@
 		min-height: 100upx;
 		position: relative;
 	}
-	
-	.item-list{
+
+	.item-list {
 		margin-bottom: 36upx;
 		margin-top: 36upx;
 	}
 
-	
+
 	.item:after {
 		position: absolute;
 		z-index: 10;
@@ -145,7 +151,7 @@
 		transform: scaleY(.5);
 		background-color: #c8c7cc;
 	}
-	
+
 	.item-hover {
 		background-color: #eee
 	}
@@ -158,19 +164,14 @@
 
 	.item-text {
 		color: #888888;
-		margin-right: 18upx;
+		margin-left: 18upx;
 	}
 
 	.item-img2 {
 		width: 40upx;
 		height: 40upx;
-	}
-
-	.item-right {
 		position: absolute;
 		right: 30upx;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
 	}
+
 </style>

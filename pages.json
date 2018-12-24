@@ -16,13 +16,25 @@
 		{
 			"path": "pages/chat/chat",
 			"style": {
-				"navigationBarTitleText": "聊天"
+				"navigationBarTitleText": "与...聊天中"
 			}
 		},
 		{
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "我的"
+			}
+		}, 
+		{
+			"path": "pages/image/crop",
+			"style": {
+				"navigationBarTitleText": "裁剪"
+			}
+		}, 
+		{
+			"path": "pages/my/userInfo",
+			"style": {
+				"navigationBarTitleText": "用户信息"
 			}
 		}, 
 		{

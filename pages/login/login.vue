@@ -36,7 +36,6 @@
 			}
 		},
 
-		// 需要全局动态改变的变量
 		computed: mapState(["hasLogin", "userName", "avatarUrl"]),
 		
 		methods: {
@@ -81,10 +80,7 @@
 					helper.showToast(data.msg);
 					// 登录成功
 					if (data.status == 0) {
-						// 保存用户数据到本地
 						service.setUserInfo(data);
-						// 设置是否登录到本地
-						service.setIsLogin(true);
 						// 更新全局变量
 						var provider = {
 							"userName": data.zsxm,
@@ -92,7 +88,6 @@
 						};
 						_this.login(provider);
 						
-						// todo
 						uni.reLaunch({
 							url:'../home/home',
 						})
